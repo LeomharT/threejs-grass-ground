@@ -4,14 +4,18 @@ import {
   BufferAttribute,
   BufferGeometry,
   Clock,
+  Color,
   DoubleSide,
   EquirectangularReflectionMapping,
   InstancedMesh,
   MathUtils,
+  MirroredRepeatWrapping,
   Object3D,
   PerspectiveCamera,
   Scene,
   ShaderMaterial,
+  TextureLoader,
+  Uniform,
   WebGLRenderer,
 } from 'three';
 import {
@@ -36,6 +40,7 @@ const sizes = {
  */
 
 const rgbeLoader = new HDRLoader();
+const textureLoader = new TextureLoader();
 
 /**
  * Texture
@@ -47,6 +52,9 @@ rgbeLoader.load('/river_alcove_2k.hdr', (data) => {
   scene.background = data;
   scene.backgroundBlurriness = 1.0;
 });
+
+const noiseTexture = textureLoader.load('/noiseTexture.png');
+noiseTexture.wrapT = noiseTexture.wrapS = MirroredRepeatWrapping;
 
 /**
  * Basic
@@ -64,7 +72,7 @@ el.append(renderer.domElement);
 const scene = new Scene();
 
 const camera = new PerspectiveCamera(50, sizes.width / sizes.height, 0.1, 1000);
-camera.position.set(7, 7, 7);
+camera.position.set(3, 3, 3);
 camera.lookAt(scene.position);
 
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -84,18 +92,28 @@ const clock = new Clock();
  * World
  */
 const params = {
-  count: 1000,
+  count: 5000,
   radius: 5.5,
 };
-const uniforms = {};
+const uniforms = {
+  uTime: new Uniform(0.0),
+  uRootColor: new Uniform(new Color('#135200')),
+  uGrassColor: new Uniform(new Color('#95de64')),
+  uGrassColor2: new Uniform(new Color('#52c41a')),
+  uNoiseTexture: new Uniform(noiseTexture),
+};
 
 const grassGeometry = new BufferGeometry();
 const positionArr = new Float32Array([
-  -0.5, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0,
+  -0.5, 0.0, 0.0, 0.0, 2.0, 0.0, 0.5, 0.0, 0.0,
 ]);
+
+const uvArr = new Float32Array([0.0, 0.0, 0.5, 1.0, 1.0, 0.0]);
+const attrUv = new BufferAttribute(uvArr, 2);
 
 const attrPosition = new BufferAttribute(positionArr, 3);
 grassGeometry.setAttribute('position', attrPosition);
+grassGeometry.setAttribute('uv', attrUv);
 
 const grassMaterial = new ShaderMaterial({
   vertexShader: grassVertexShader,
@@ -105,6 +123,8 @@ const grassMaterial = new ShaderMaterial({
 });
 
 const grass = new InstancedMesh(grassGeometry, grassMaterial, params.count);
+grass.scale.setScalar(0.3);
+
 const object3D = new Object3D();
 
 for (let i = 0; i < params.count; i++) {
@@ -114,7 +134,6 @@ for (let i = 0; i < params.count; i++) {
     MathUtils.randFloat(-params.radius, params.radius)
   );
   object3D.scale.set(1, MathUtils.randFloat(0.6, 1), 1);
-  object3D.lookAt(scene.position);
 
   object3D.updateMatrix();
 
@@ -145,6 +164,7 @@ function render() {
   // Time
   fpsGraph.begin();
   const delta = clock.getDelta();
+  const elapsed = clock.getElapsedTime();
 
   // Render
   renderer.render(scene, camera);
@@ -152,6 +172,7 @@ function render() {
   // Update
   controls.update(delta);
   controls2.update();
+  uniforms.uTime.value = elapsed;
 
   // Animation
   fpsGraph.end();

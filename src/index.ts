@@ -92,7 +92,7 @@ const clock = new Clock();
  * World
  */
 const params = {
-  count: 5000,
+  count: 12000,
   radius: 5.5,
 };
 const uniforms = {

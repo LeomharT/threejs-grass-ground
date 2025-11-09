@@ -7,6 +7,8 @@ uniform vec3 uRootColor;
 uniform vec3 uGrassColor;
 uniform vec3 uGrassColor2;
 
+uniform float uNoiseEdge;
+
 uniform sampler2D uNoiseTexture;
 
 
@@ -20,8 +22,12 @@ void main(){
     vec4 noiseColor = texture2D(uNoiseTexture, groundUv);
     vec3 grassColor = uGrassColor;
 
-    if(noiseColor.r > 0.4) {
+    if(noiseColor.r > uNoiseEdge) {
         grassColor = uGrassColor2;
+    }
+
+    if(noiseColor.r > 0.5) {
+        discard;
     }
     
     color = mix(

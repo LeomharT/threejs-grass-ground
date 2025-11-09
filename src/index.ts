@@ -101,6 +101,7 @@ const uniforms = {
   uGrassColor: new Uniform(new Color('#95de64')),
   uGrassColor2: new Uniform(new Color('#52c41a')),
   uNoiseTexture: new Uniform(noiseTexture),
+  uNoiseEdge: new Uniform(0.4),
 };
 
 const grassGeometry = new BufferGeometry();
@@ -154,6 +155,14 @@ const fpsGraph: any = pane.addBlade({
   view: 'fpsgraph',
   label: undefined,
   rows: 4,
+});
+
+const grassPane = pane.addFolder({ title: '🌿Grass' });
+grassPane.addBinding(uniforms.uNoiseEdge, 'value', {
+  label: 'Noise Edge',
+  min: 0.1,
+  max: 1.0,
+  step: 0.001,
 });
 
 /**

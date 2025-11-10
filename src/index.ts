@@ -164,6 +164,18 @@ grassPane.addBinding(uniforms.uNoiseEdge, 'value', {
   max: 1.0,
   step: 0.001,
 });
+grassPane.addBinding(uniforms.uGrassColor, 'value', {
+  label: 'Grass Color 1',
+  color: {
+    type: 'float',
+  },
+});
+grassPane.addBinding(uniforms.uGrassColor, 'value', {
+  label: 'Grass Color 1',
+  color: {
+    type: 'float',
+  },
+});
 
 /**
  * Events

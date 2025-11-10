@@ -9,9 +9,11 @@ import {
   EquirectangularReflectionMapping,
   InstancedMesh,
   MathUtils,
+  Mesh,
   MirroredRepeatWrapping,
   Object3D,
   PerspectiveCamera,
+  PlaneGeometry,
   Scene,
   ShaderMaterial,
   TextureLoader,
@@ -142,6 +144,14 @@ for (let i = 0; i < params.count; i++) {
 }
 
 scene.add(grass);
+
+const waterGeometry = new PlaneGeometry(params.radius, params.radius, 64, 64);
+const waterMaterial = new ShaderMaterial({});
+
+const water = new Mesh(waterGeometry, waterMaterial);
+water.rotation.x = -Math.PI / 2;
+water.scale.setScalar(0.6);
+scene.add(water);
 
 /**
  * Pane

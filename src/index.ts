@@ -120,7 +120,7 @@ const uniforms = {
   uNoiseUvPosition: new Uniform(new Vector2(-0.18, -0.19)),
   uNoiseUvFrequency: new Uniform(7.0),
   uWaterDepthColor: new Uniform(new Color('#3e6871')),
-  uWaterShoreColor: new Uniform(new Color('#68c197')),
+  uWaterShoreColor: new Uniform(new Color('#38cf61')),
 };
 
 const grassGeometry = new BufferGeometry();
@@ -245,6 +245,21 @@ waterPane.addBinding(uniforms.uNoiseUvPosition, 'value', {
   x: { step: 0.01, min: -1, max: 1 },
   y: { step: 0.01, min: -1, max: 1 },
 });
+waterPane
+  .addBinding(uniforms.uWaterShoreColor, 'value', {
+    label: 'Water Shore Color',
+    color: {
+      type: 'float',
+    },
+  })
+  .on('change', (val) => {
+    uniforms.uWaterShoreColor.value.setRGB(
+      val.value.r,
+      val.value.g,
+      val.value.b
+    );
+  });
+
 /**
  * Events
  */

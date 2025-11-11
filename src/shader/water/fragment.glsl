@@ -20,11 +20,15 @@ void main(){
     if(uv.y < 0.01 || uv.y > 0.61) discard;
 
     vec4  noiseColor      = texture2D(uNoiseTexture, uv);
-    float distanceToShore = noiseColor.b;
+    float distanceToShore = 1.0 - noiseColor.b;
+    distanceToShore = smoothstep(0.2, 0.4, distanceToShore);
 
-
-    color = vec3(distanceToShore);
-
+    color = mix(
+        uWaterDepthColor,
+        uWaterShoreColor,
+        distanceToShore
+    );
+    // color = vec3(distanceToShore);
 
     gl_FragColor = vec4(color, 1.0);
 }

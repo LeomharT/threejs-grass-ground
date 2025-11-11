@@ -100,8 +100,6 @@ const params = {
   radius: 5.5,
 };
 
-const waterGeometry = new PlaneGeometry(params.radius, params.radius, 64, 64);
-
 const uniforms = {
   uTime: new Uniform(0.0),
   uRootColor: new Uniform(new Color('#135200')),
@@ -118,7 +116,14 @@ const positionArr = new Float32Array([
   -0.5, 0.0, 0.0, 0.0, 2.0, 0.0, 0.5, 0.0, 0.0,
 ]);
 
-const uvArr = new Float32Array([0.0, 0.0, 0.5, 1.0, 1.0, 0.0]);
+const uvArr = new Float32Array([
+  //
+  0.0, 0.0,
+  //
+  0.5, 1.0,
+  //
+  1.0, 0.0,
+]);
 const attrUv = new BufferAttribute(uvArr, 2);
 
 const attrPosition = new BufferAttribute(positionArr, 3);
@@ -150,8 +155,9 @@ for (let i = 0; i < params.count; i++) {
   grass.setMatrixAt(i, object3D.matrix);
 }
 
-scene.add(grass);
+// scene.add(grass);
 
+const waterGeometry = new PlaneGeometry(params.radius, params.radius, 128, 128);
 const waterMaterial = new ShaderMaterial({
   vertexShader: waterVertexShader,
   fragmentShader: waterFragmentShader,

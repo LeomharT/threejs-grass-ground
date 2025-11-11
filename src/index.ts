@@ -60,6 +60,9 @@ rgbeLoader.load('/river_alcove_2k.hdr', (data) => {
 const noiseTexture = textureLoader.load('/noiseTexture.png');
 noiseTexture.wrapT = noiseTexture.wrapS = MirroredRepeatWrapping;
 
+const noiseTexture2 = textureLoader.load('/noiseTexture_2.png');
+noiseTexture2.wrapT = noiseTexture.wrapS = MirroredRepeatWrapping;
+
 /**
  * Basic
  */
@@ -106,9 +109,11 @@ const uniforms = {
   uGrassColor: new Uniform(new Color('#95de64')),
   uGrassColor2: new Uniform(new Color('#52c41a')),
   uNoiseTexture: new Uniform(noiseTexture),
+  uNoiseTexture2: new Uniform(noiseTexture2),
   uNoiseEdge: new Uniform(0.4),
   uNoiseUvScale: new Uniform(1.0),
   uNoiseUvPosition: new Uniform(new Vector2(-0.18, -0.19)),
+  uNoiseUvFrequency: new Uniform(7.0),
 };
 
 const grassGeometry = new BufferGeometry();
@@ -155,9 +160,9 @@ for (let i = 0; i < params.count; i++) {
   grass.setMatrixAt(i, object3D.matrix);
 }
 
-// scene.add(grass);
+scene.add(grass);
 
-const waterGeometry = new PlaneGeometry(params.radius, params.radius, 128, 128);
+const waterGeometry = new PlaneGeometry(params.radius, params.radius, 512, 512);
 const waterMaterial = new ShaderMaterial({
   vertexShader: waterVertexShader,
   fragmentShader: waterFragmentShader,
@@ -209,6 +214,12 @@ waterPane.addBinding(uniforms.uNoiseUvScale, 'value', {
   label: 'Noise Scale',
   min: 0.1,
   max: 1.0,
+  step: 0.001,
+});
+waterPane.addBinding(uniforms.uNoiseUvFrequency, 'value', {
+  label: 'Noise Frequency',
+  min: -10.0,
+  max: 10.0,
   step: 0.001,
 });
 waterPane.addBinding(uniforms.uNoiseUvPosition, 'value', {

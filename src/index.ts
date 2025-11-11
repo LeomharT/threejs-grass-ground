@@ -30,8 +30,9 @@ import { Pane } from 'tweakpane';
 import './index.css';
 import grassFragmentShader from './shader/grass/fragment.glsl?raw';
 import grassVertexShader from './shader/grass/vertex.glsl?raw';
-import waterFragmentShader from './shader/water/fragment.glsl?raw';
-import waterVertexShader from './shader/water/vertex.glsl?raw';
+import waterRippleFragmentShader from './shader/waterRipple/fragment.glsl?raw';
+import waterRippleVertexShader from './shader/waterRipple/vertex.glsl?raw';
+
 const el = document.querySelector('#root') as HTMLDivElement;
 const sizes = {
   width: window.innerWidth,
@@ -104,13 +105,16 @@ const params = {
 };
 
 const uniforms = {
+  // Common
   uTime: new Uniform(0.0),
+  uNoiseTexture: new Uniform(noiseTexture),
+  uNoiseTexture2: new Uniform(noiseTexture2),
+  // Grass
   uRootColor: new Uniform(new Color('#135200')),
   uGrassColor: new Uniform(new Color('#95de64')),
   uGrassColor2: new Uniform(new Color('#52c41a')),
-  uNoiseTexture: new Uniform(noiseTexture),
-  uNoiseTexture2: new Uniform(noiseTexture2),
-  uNoiseEdge: new Uniform(0.4),
+  uNoiseEdge: new Uniform(0.475),
+  // Water
   uNoiseUvScale: new Uniform(1.0),
   uNoiseUvPosition: new Uniform(new Vector2(-0.18, -0.19)),
   uNoiseUvFrequency: new Uniform(7.0),
@@ -163,17 +167,16 @@ for (let i = 0; i < params.count; i++) {
 scene.add(grass);
 
 const waterGeometry = new PlaneGeometry(params.radius, params.radius, 512, 512);
-const waterMaterial = new ShaderMaterial({
-  vertexShader: waterVertexShader,
-  fragmentShader: waterFragmentShader,
+const waterRippleMaterial = new ShaderMaterial({
+  vertexShader: waterRippleVertexShader,
+  fragmentShader: waterRippleFragmentShader,
   uniforms,
   side: DoubleSide,
 });
 
-const water = new Mesh(waterGeometry, waterMaterial);
-water.rotation.x = Math.PI / 2;
-// water.rotation.z = Math.PI;
-scene.add(water);
+const waterRipple = new Mesh(waterGeometry, waterRippleMaterial);
+waterRipple.rotation.x = Math.PI / 2;
+scene.add(waterRipple);
 
 /**
  * Pane

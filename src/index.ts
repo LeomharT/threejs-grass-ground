@@ -18,6 +18,7 @@ import {
   ShaderMaterial,
   TextureLoader,
   Uniform,
+  Vector2,
   WebGLRenderer,
 } from 'three';
 import {
@@ -108,6 +109,8 @@ const uniforms = {
   uGrassColor2: new Uniform(new Color('#52c41a')),
   uNoiseTexture: new Uniform(noiseTexture),
   uNoiseEdge: new Uniform(0.4),
+  uNoiseUvScale: new Uniform(1.0),
+  uNoiseUvPosition: new Uniform(new Vector2(-0.18, -0.19)),
 };
 
 const grassGeometry = new BufferGeometry();
@@ -121,7 +124,6 @@ const attrUv = new BufferAttribute(uvArr, 2);
 const attrPosition = new BufferAttribute(positionArr, 3);
 grassGeometry.setAttribute('position', attrPosition);
 grassGeometry.setAttribute('uv', attrUv);
-grassGeometry.setAttribute('aPlaneUV', waterGeometry.getAttribute('uv'));
 
 const grassMaterial = new ShaderMaterial({
   vertexShader: grassVertexShader,
@@ -154,10 +156,12 @@ const waterMaterial = new ShaderMaterial({
   vertexShader: waterVertexShader,
   fragmentShader: waterFragmentShader,
   uniforms,
+  side: DoubleSide,
 });
 
 const water = new Mesh(waterGeometry, waterMaterial);
-water.rotation.x = -Math.PI / 2;
+water.rotation.x = Math.PI / 2;
+// water.rotation.z = Math.PI;
 scene.add(water);
 
 /**
@@ -194,6 +198,18 @@ grassPane.addBinding(uniforms.uGrassColor, 'value', {
   },
 });
 
+const waterPane = pane.addFolder({ title: '🌊Water' });
+waterPane.addBinding(uniforms.uNoiseUvScale, 'value', {
+  label: 'Noise Scale',
+  min: 0.1,
+  max: 1.0,
+  step: 0.001,
+});
+waterPane.addBinding(uniforms.uNoiseUvPosition, 'value', {
+  label: 'Noise Position',
+  x: { step: 0.01, min: -1, max: 1 },
+  y: { step: 0.01, min: -1, max: 1 },
+});
 /**
  * Events
  */

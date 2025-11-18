@@ -119,7 +119,7 @@ const uniforms = {
   uNoiseUvScale: new Uniform(1.0),
   uNoiseUvPosition: new Uniform(new Vector2(-0.18, -0.19)),
   uNoiseUvFrequency: new Uniform(6.52),
-  uShoreAlpha: new Uniform(0.5),
+  uShoreAlpha: new Uniform(0.55),
   uWaterDepthColor: new Uniform(new Color('#3e6871')),
   uWaterShoreColor: new Uniform(new Color(0.47, 0.88, 0.49)),
 };

@@ -28,18 +28,28 @@ void main(){
     float distanceToEdge = pow(noiseColor.r, 2.0);
     distanceToEdge = smoothstep(0.1, 0.5, distanceToEdge);
 
-    vec3 edgeColor = vec3(noiseColor.r);
-    edgeColor *= 35.0;
-    edgeColor += uTime * 0.5;
-    edgeColor = fract(edgeColor);
-    edgeColor = smoothstep(1.0 - distanceToEdge, 1.0, edgeColor);
+    vec3 baseRipple = vec3(noiseColor.r);
+    baseRipple *= 35.0;
+    baseRipple += uTime * 0.5;
+
+    vec3 edgeColor = fract(baseRipple);
+    edgeColor = smoothstep(0.5 - distanceToEdge, 1.0, edgeColor);
+
+    float rippleIndex = floor(baseRipple.r);
+    
+    vec4 noiseRipple = texture2D(
+        uNoiseTexture2,
+        uv + rippleIndex / 0.345 * uNoiseUvFrequency
+    );
 
     color = edgeColor - noiseColor2.r;
 
-    if(color.r <= 0.45) discard;
-    if(distanceToEdge > 0.65) discard;
+    color = vec3(rippleIndex * 0.01);
 
-    color += 0.5;
+    // if(color.r <= 0.45) discard;
+    // if(distanceToEdge > 0.65) discard;
+
+    // color += 0.5;
   
     gl_FragColor = vec4(color, 1.0);
 }

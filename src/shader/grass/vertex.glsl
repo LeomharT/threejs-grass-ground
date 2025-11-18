@@ -4,16 +4,6 @@ varying vec3 vPosition;
 uniform float uTime;
 uniform sampler2D uNoiseTexture;
 
-// https://stackoverflow.com/questions/55582846/how-do-i-implement-an-instanced-billboard-in-three-js
-vec3 billboard(vec3 v,mat4 view){
-    vec3 up=vec3(view[0][1],view[1][1],view[2][1]);
-    up.x = 0.0;
-    up.z = 0.0;
-    vec3 right=vec3(view[0][0],view[1][0],view[2][0]);
-    vec3 pos=right*v.x+up*v.y;
-    return pos;
-}
-
 // return value [-1.0, 1.0] so scale the grass!!!
 vec2 getWind(sampler2D noiseTexture, vec3 worldPosition) {
     float time = uTime;
@@ -35,6 +25,38 @@ vec2 getWind(sampler2D noiseTexture, vec3 worldPosition) {
     return direction * intensity;
 }
 
+// https://stackoverflow.com/questions/55582846/how-do-i-implement-an-instanced-billboard-in-three-js
+vec3 billboard(vec3 v,mat4 view){
+    vec3 up=vec3(view[0][1],view[1][1],view[2][1]);
+    up.x = 0.0;
+    up.z = 0.0;
+    vec3 right=vec3(view[0][0],view[1][0],view[2][0]);
+    vec3 pos=right*v.x+up*v.y;
+    return pos;
+}
+
+vec3 billboardFix(vec3 v,mat4 view){
+    vec3 up=vec3(0.0, 1.0, 0.0);
+    vec3 right=vec3(view[0][0],view[1][0],view[2][0]);
+    vec3 pos=right*v.x+up*v.y;
+    return pos;
+}
+
+vec3 billboardCenter(vec3 v, mat4 view) {
+    vec4 center  = instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0);
+    vec3 lookDir = cameraPosition - center.xyz;
+
+    vec3 forward = normalize(vec3(lookDir.x, 0.0, lookDir.z));
+    vec3 up      = vec3(0.0,1.0,0.0);
+    vec3 right   = cross(forward, up);
+ 
+    vec3 pos = right * v.x + up * v.y;
+    pos += center.xyz;
+    pos *= 0.2;
+
+    return pos;
+}
+
 
 
 void main(){
@@ -44,7 +66,8 @@ void main(){
     // instanceMatrix instand of modelMatrix
     vec4 modelPosition = instanceMatrix * vec4(position, 1.0);
    
-    vec3 billboardPos = billboard(transformed, modelViewMatrix);
+    vec3 billboardPos = billboardFix(transformed, modelViewMatrix);
+    // vec3 billboardPosY = billboardCenter(transformed, viewMatrix);
     transformed = billboardPos;
  
     #include <project_vertex>

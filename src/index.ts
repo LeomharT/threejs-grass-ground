@@ -125,7 +125,7 @@ const uniforms = {
 
 const grassGeometry = new BufferGeometry();
 const positionArr = new Float32Array([
-  -0.5, 0.0, 0.0, 0.0, 2.0, 0.0, 0.5, 0.0, 0.0,
+  -0.5, 0.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.0,
 ]);
 
 const uvArr = new Float32Array([
@@ -160,7 +160,7 @@ for (let i = 0; i < params.count; i++) {
     0,
     MathUtils.randFloat(-params.radius, params.radius)
   );
-  object3D.scale.set(1, MathUtils.randFloat(0.6, 1), 1);
+  object3D.scale.set(1, MathUtils.randFloat(0.3, 0.6), 1);
 
   object3D.updateMatrix();
 
@@ -245,16 +245,12 @@ waterPane.addBinding(uniforms.uNoiseUvPosition, 'value', {
   x: { step: 0.01, min: -1, max: 1 },
   y: { step: 0.01, min: -1, max: 1 },
 });
-waterPane
-  .addBinding(uniforms.uWaterShoreColor, 'value', {
-    label: 'Water Shore Color',
-    color: {
-      type: 'float',
-    },
-  })
-  .on('change', (val) => {
-    uniforms.uWaterShoreColor.value.set(val.value.getHexString('SRGB'));
-  });
+waterPane.addBinding(uniforms.uWaterShoreColor, 'value', {
+  label: 'Water Shore Color',
+  color: {
+    type: 'float',
+  },
+});
 
 /**
  * Events

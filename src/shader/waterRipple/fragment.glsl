@@ -1,6 +1,7 @@
 #define RADIUS 5.5
 
 varying vec2 vUv;
+varying vec3 vPosition;
 
 uniform sampler2D uNoiseTexture;
 uniform sampler2D uNoiseTexture2;
@@ -9,6 +10,7 @@ uniform sampler2D uNoiseTexture2;
 uniform float uTime;
 uniform float uNoiseUvScale;
 uniform float uNoiseUvFrequency;
+uniform float uShoreAlpha;
 uniform vec2 uNoiseUvPosition;
 
 void main(){
@@ -33,23 +35,21 @@ void main(){
     baseRipple += uTime * 0.5;
 
     vec3 edgeColor = fract(baseRipple);
-    edgeColor = smoothstep(0.5 - distanceToEdge, 1.0, edgeColor);
+    edgeColor = smoothstep(0.4 - distanceToEdge, 1.0, edgeColor);
 
     float rippleIndex = floor(baseRipple.r);
     
     vec4 noiseRipple = texture2D(
         uNoiseTexture2,
-        uv + rippleIndex / 0.345 * uNoiseUvFrequency
+        vPosition.xz + rippleIndex / 0.345 * uNoiseUvFrequency
     );
 
-    color = edgeColor - noiseColor2.r;
+    color = edgeColor - noiseRipple.r;
 
-    color = vec3(rippleIndex * 0.01);
+    if(color.r <= uShoreAlpha) discard;
+    if(distanceToEdge > 0.8) discard;
 
-    // if(color.r <= 0.45) discard;
-    // if(distanceToEdge > 0.65) discard;
-
-    // color += 0.5;
+    color += 0.5;
   
     gl_FragColor = vec4(color, 1.0);
 }

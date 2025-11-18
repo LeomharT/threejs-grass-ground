@@ -118,7 +118,8 @@ const uniforms = {
   // Water
   uNoiseUvScale: new Uniform(1.0),
   uNoiseUvPosition: new Uniform(new Vector2(-0.18, -0.19)),
-  uNoiseUvFrequency: new Uniform(7.0),
+  uNoiseUvFrequency: new Uniform(6.52),
+  uShoreAlpha: new Uniform(0.5),
   uWaterDepthColor: new Uniform(new Color('#3e6871')),
   uWaterShoreColor: new Uniform(new Color(0.47, 0.88, 0.49)),
 };
@@ -236,8 +237,14 @@ waterPane.addBinding(uniforms.uNoiseUvScale, 'value', {
 });
 waterPane.addBinding(uniforms.uNoiseUvFrequency, 'value', {
   label: 'Noise Frequency',
-  min: -10.0,
+  min: 0.0,
   max: 10.0,
+  step: 0.001,
+});
+waterPane.addBinding(uniforms.uShoreAlpha, 'value', {
+  label: 'Shore Alpha',
+  min: 0.0,
+  max: 1.0,
   step: 0.001,
 });
 waterPane.addBinding(uniforms.uNoiseUvPosition, 'value', {

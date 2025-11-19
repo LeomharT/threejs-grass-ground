@@ -221,8 +221,8 @@ grassPane.addBinding(uniforms.uGrassColor, 'value', {
     type: 'float',
   },
 });
-grassPane.addBinding(uniforms.uGrassColor, 'value', {
-  label: 'Grass Color 1',
+grassPane.addBinding(uniforms.uGrassColor2, 'value', {
+  label: 'Grass Color 2',
   color: {
     type: 'float',
   },

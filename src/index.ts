@@ -101,7 +101,7 @@ const clock = new Clock();
  * World
  */
 const params = {
-  count: 12000,
+  count: 8500,
   radius: 5.5,
 };
 
@@ -117,7 +117,7 @@ const uniforms = {
   uNoiseEdge: new Uniform(0.475),
   // Water
   uNoiseUvScale: new Uniform(1.0),
-  uNoiseUvPosition: new Uniform(new Vector2(-0.18, -0.19)),
+  uNoiseUvPosition: new Uniform(new Vector2(-0.19, -0.19)),
   uNoiseUvFrequency: new Uniform(6.52),
   uShoreAlpha: new Uniform(0.55),
   uWaterDepthColor: new Uniform(new Color('#3e6871')),

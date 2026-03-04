@@ -29,7 +29,7 @@ import {
 } from 'three';
 import { OrbitControls, Sky } from 'three/examples/jsm/Addons.js';
 import { Pane } from 'tweakpane';
-import grassFragmentShader from './shader/grass/fragmeng.glsl?raw';
+import grassFragmentShader from './shader/grass/fragment.glsl?raw';
 import grassVertexShader from './shader/grass/vertex.glsl?raw';
 import simplex2DNoise from './shader/include/simplex2DNoise.glsl?raw';
 import simplex3DNoise from './shader/include/simplex3DNoise.glsl?raw';

@@ -13,7 +13,7 @@ vec2 rotate2D(vec2 v, float angle) {
         cos(angle), -sin(angle),
         sin(angle), cos(angle)
     );
-    return v * m;
+    return m * v;
 }
 
 // return value [-1.0, 1.0] so scale the grass!!!
@@ -45,9 +45,8 @@ void main(){
     vec4 instancePosition = modelMatrix * instanceMatrix * vec4(vec3(0.0), 1.0);
     vec3 viewDirection    = normalize(cameraPosition - instancePosition.xyz);
 
-    float angle  = atan(viewDirection.z, viewDirection.x);
-          angle -= PI / 2.0;
-
+    float angle = atan(viewDirection.x, viewDirection.z);
+ 
     vec2 rotateXZ       = rotate2D(transformed.xz, angle);
          transformed.xz = rotateXZ;
 

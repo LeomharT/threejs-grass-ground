@@ -23,7 +23,7 @@ import { Pane } from 'tweakpane';
 import grassFragmentShader from './shader/grass/fragment.glsl?raw';
 import grassVertexShader from './shader/grass/vertex.glsl?raw';
 import simplex3DNoise from './shader/include/simplex3DNoise.glsl?raw';
-import './style.css';
+import '../index.css';
 
 (ShaderChunk as any)['simplex3DNoise'] = simplex3DNoise;
 

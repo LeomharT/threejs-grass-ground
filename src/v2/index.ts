@@ -174,7 +174,6 @@ function render() {
 
   // Time
   const delta = clock.getDelta();
-  const elapsed = clock.getElapsed();
 
   uniforms.uTime.value += delta;
 

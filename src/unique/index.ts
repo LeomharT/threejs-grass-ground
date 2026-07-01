@@ -33,7 +33,7 @@ import grassFragmentShader from './shader/grass/fragment.glsl?raw';
 import grassVertexShader from './shader/grass/vertex.glsl?raw';
 import simplex2DNoise from './shader/include/simplex2DNoise.glsl?raw';
 import simplex3DNoise from './shader/include/simplex3DNoise.glsl?raw';
-import './style.css';
+import '../index.css'
 
 (ShaderChunk as any)['simplex3DNoise'] = simplex3DNoise;
 (ShaderChunk as any)['simplex2DNoise'] = simplex2DNoise;
@@ -51,7 +51,6 @@ const noise2D = createNoise2D();
 const background = new Color(Colors.LIGHT_GRAY3);
 
 const textureLoader = new TextureLoader();
-textureLoader.setPath('/src/assets/textures/');
 
 const renderer = new WebGLRenderer({
   alpha: true,

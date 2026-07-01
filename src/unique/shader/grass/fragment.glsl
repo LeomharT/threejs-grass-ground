@@ -21,18 +21,22 @@ void main() {
   float alpha = texture2D(uAlphaTexture, uv).r;
   if (alpha <= 0.5) discard;
 
-  vec4 noiseColor = texture2D(uNoiseTexture, gridUv);
-  vec3 tipColor = mix(uTipColor, uTipColor2, step(0.5, noiseColor.r));
+  vec4  noiseColor = texture2D(uNoiseTexture, gridUv);
+  float gradient   = step(0.5, noiseColor.r);
+  vec3  tipColor   = mix(uTipColor, uTipColor2, step(0.5, noiseColor.r));
 
   vec4 diffuseColor = texture2D(uDiffuseTexture, uv);
+  
   color = diffuseColor.rgb;
   color = mix(tipColor, color, vH);
   color = mix(uBottomColor, color, vH);
 
   float tipMix = smoothstep(0.8, 1.2, uv.y);
 
-  color = mix(color, vec3(1.0), tipMix);
-
+  if (bool(gradient)) {
+    color = mix(color, vec3(1.0), tipMix);
+  }
+  
   gl_FragColor = vec4(color, 1.0);
 
   #include <tonemapping_fragment>
